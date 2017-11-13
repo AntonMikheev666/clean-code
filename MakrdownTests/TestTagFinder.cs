@@ -10,14 +10,14 @@ namespace MakrdownTests
         {
         }
 
-        public string TestSelectProperOpenTag(string input)
+        public OpenTag TestSelectProperOpenTag(string input, int selectStartIndex)
         {
-            return base.SelectProperOpenTag(input);
+            return base.SelectProperOpenTag(input, selectStartIndex);
         }
 
-        public string TestSelectProperCloseTag(string input)
+        public CloseTag TestSelectProperCloseTag(string input, int selectStartIndex)
         {
-            return base.SelectProperCloseTag(input);
+            return base.SelectProperCloseTag(input, selectStartIndex);
         }
 
         public Tag TestFindTag(string input)

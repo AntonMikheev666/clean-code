@@ -20,35 +20,41 @@ namespace Markdown
 
             for (var i = 0; i < str.Length; i++)
             {
-                //if()
+                if (!tagStrings.Any(s => str.Substring(i).StartsWith(s)))
+                {
+                    previousCharIsWhiteSpace = char.IsWhiteSpace(str[i]);
+                    continue;
+                }
+
+                var foundTag = previousCharIsWhiteSpace ? (Tag)
+                    SelectProperOpenTag(str, i) : SelectProperCloseTag(str, i);
+
+                if (foundTag != null)
+                    return foundTag;
             }
-            return new Tag("", 0);
+            return null;
         }
 
-        protected string SelectProperOpenTag(string tagStartsStr)
+        protected OpenTag SelectProperOpenTag(string input, int selectStartIndex)
         {
             var properTagStr = tagStrings
-                .FirstOrDefault(s => tagStartsStr.Length > s.Length &&
-                                     tagStartsStr.StartsWith(s) && !char.IsWhiteSpace(tagStartsStr[s.Length]));
+                .FirstOrDefault(s => input.Substring(selectStartIndex).Length > s.Length &&
+                                     input.Substring(selectStartIndex).StartsWith(s) && 
+                                     !char.IsWhiteSpace(input[s.Length]));
 
-            if (properTagStr == null)
-                return string.Empty;
-
-            return properTagStr;
+            return properTagStr == null ? null : new OpenTag(properTagStr, selectStartIndex);
         }
 
-        protected string SelectProperCloseTag(string tagStartsStr)
+        protected CloseTag SelectProperCloseTag(string input, int selectStartIndex)
         {
-            var spaceIndex = tagStartsStr.IndexOf(" ", StringComparison.Ordinal);
-            var firstWord = spaceIndex <= 0 ? tagStartsStr : tagStartsStr.Substring(0, spaceIndex);
+            var spaceIndex = input.Substring(selectStartIndex).IndexOf(" ", StringComparison.Ordinal);
+            var firstWord = spaceIndex <= 0 ? 
+                    input.Substring(selectStartIndex) : input.Substring(selectStartIndex, spaceIndex);
 
             var properTagStr = tagStrings
                 .FirstOrDefault(s => firstWord.EndsWith(s));
 
-            if (properTagStr == null)
-                return string.Empty;
-
-            return properTagStr;
+            return properTagStr == null ? null : new CloseTag(properTagStr, selectStartIndex);
         }
     }
 }
