@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Markdown.Tags;
 using NUnit.Framework;
-using FluentAssertions;
 
 namespace MakrdownTests
 {
@@ -27,10 +25,10 @@ namespace MakrdownTests
 
         [TestCase("_", ExpectedResult = "_", TestName = "SingleUnderline")]
         [TestCase("__", ExpectedResult = "__", TestName = "DoubleUnderline")]
-        [TestCase("___", ExpectedResult = "__", TestName = "TripleUnderline")]
+        [TestCase("___", ExpectedResult = "", TestName = "TripleUnderline")]
         [TestCase("_ qwe", ExpectedResult = "_", TestName = "SpaceAfterSingleUnderline")]
         [TestCase("__ qwe", ExpectedResult = "__", TestName = "SpaceAfterDoubleUnderline")]
-        [TestCase("___ qwe", ExpectedResult = "__", TestName = "SpaceAfterTripleUnderline")]
+        [TestCase("___ qwe", ExpectedResult = "", TestName = "SpaceAfterTripleUnderline")]
         [TestCase("_qwe", ExpectedResult = "", TestName = "WordAfterSingleUnderline")]
         [TestCase("__qwe", ExpectedResult = "", TestName = "WordAfterDoubleUnderline")]
         [TestCase("___qwe", ExpectedResult = "", TestName = "WordAfterTripleUnderline")]
@@ -65,9 +63,9 @@ namespace MakrdownTests
                 yield return new TestCaseData("qwe_ qw").Returns(new CloseTag("_", 3)).SetName("SpaceAfterSingleCloseTag");
                 yield return new TestCaseData("qwe__ qw").Returns(new CloseTag("__", 3)).SetName("SpaceAfterDoubleCloseTag");
                 yield return new TestCaseData("qwe___ qw").Returns(new CloseTag("__", 4)).SetName("SpaceAfterTripleCloseTag");
-                yield return new TestCaseData("qwe_qw").Returns(null).SetName("SpaceAfterSingleCloseTag");
-                yield return new TestCaseData("qwe__qw").Returns(null).SetName("SpaceAfterDoubleCloseTag");
-                yield return new TestCaseData("qwe___qw").Returns(null).SetName("SpaceAfterTripleCloseTag");
+                yield return new TestCaseData("qwe_qw").Returns(null).SetName("SingleUnderlineInWord");
+                yield return new TestCaseData("qwe__qw").Returns(null).SetName("DoubleUnderlineInWord");
+                yield return new TestCaseData("qwe___qw").Returns(null).SetName("TripleUnderlineInWord");
             }
         }
     }

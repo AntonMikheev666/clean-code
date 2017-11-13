@@ -52,7 +52,7 @@ namespace Markdown
                     input.Substring(selectStartIndex) : input.Substring(selectStartIndex, spaceIndex);
 
             var properTagStr = tagStrings
-                .FirstOrDefault(s => firstWord.EndsWith(s));
+                .FirstOrDefault(s => firstWord == s);
 
             return properTagStr == null ? null : new CloseTag(properTagStr, selectStartIndex);
         }
