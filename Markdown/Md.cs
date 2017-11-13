@@ -1,4 +1,4 @@
-﻿namespace Markdown
+﻿namespace Markdown.Implementations
 {
 	public class Md
 	{

@@ -47,8 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tags\CloseTag.cs" />
     <Compile Include="Md.cs" />
-    <Compile Include="MdTests.cs" />
+    <Compile Include="Tags\OpenTag.cs" />
+    <Compile Include="TagFinder.cs" />
+    <Compile Include="Tags\Tag.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
