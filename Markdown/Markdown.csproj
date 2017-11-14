@@ -38,6 +38,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TagChanger.cs" />
     <Compile Include="Tags\CloseTag.cs" />
     <Compile Include="Md.cs" />
     <Compile Include="Tags\OpenTag.cs" />

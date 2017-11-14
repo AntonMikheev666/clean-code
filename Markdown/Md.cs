@@ -1,15 +1,30 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Markdown.Tags;
 
 namespace Markdown
 {
 	public class Md
 	{
-        private TagFinder tagFinder = new TagFinder(new []{"_", "__"});
-		public string RenderToHtml(string markdown)
+        private readonly TagFinder tagFinder;
+        private readonly TagChanger tagChanger;
+
+        public Md(IEnumerable<string> tagStrings,
+            Dictionary<string, string> openTagChangeTo, Dictionary<string, string> closeTagChangeTo)
+	    {
+	        tagFinder = new TagFinder(tagStrings);
+            tagChanger = new TagChanger(openTagChangeTo, closeTagChangeTo);
+	    }
+
+		public string RenderToHtml(string markdownString)
 		{
-            var tagStack = new Stack<OpenTag>();
-		    return "";
+		    var allPairedTags = tagFinder.GetAllPairedTags(markdownString);
+
+		    foreach (var tag in allPairedTags.Reverse())
+		        markdownString = tagChanger.ChangeTag(markdownString, tag);
+
+		    return markdownString;
 		}
 	}
 }

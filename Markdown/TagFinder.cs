@@ -14,19 +14,56 @@ namespace Markdown
             this.tagStrings = tagStrings.OrderByDescending(s => s.Length).ToArray();
         }
 
-        public Tag FindTag(string str)
+        public Tag[] GetAllPairedTags(string input)
         {
+            var tags = new List<Tag>();
+            var tagStack = new Stack<OpenTag>();
             var previousCharIsWhiteSpace = true;
-
-            for (var i = 0; i < str.Length; i++)
+            for (var i = 0; i < input.Length;)
             {
-                if (!tagStrings.Any(s => str.Substring(i).StartsWith(s)))
+                var newTag = FindTag(input, i, previousCharIsWhiteSpace);
+
+                if (newTag == null)
+                    break;
+
+                if (newTag is OpenTag)
                 {
-                    previousCharIsWhiteSpace = char.IsWhiteSpace(str[i]);
+                    tagStack.Push((OpenTag)newTag);
+                    i = newTag.StartIndex + newTag.TagString.Length;
+                    previousCharIsWhiteSpace = char.IsWhiteSpace(input[i - 1]);
                     continue;
                 }
 
-                var foundTag = previousCharIsWhiteSpace ? (Tag)
+                var topTag = tagStack.Peek();
+                while (!(topTag.TagString.StartsWith(newTag.TagString) && newTag.TagString.StartsWith(topTag.TagString)))
+                {
+                    tagStack.Pop();
+                    topTag = tagStack.Peek();
+                }
+
+                tags.Insert(0, tagStack.Pop());
+                tags.Add(newTag);
+
+                i = newTag.StartIndex + newTag.TagString.Length;
+                previousCharIsWhiteSpace = char.IsWhiteSpace(input[i - 1]);
+            }
+
+            return tags.ToArray();
+        }
+
+        public Tag FindTag(string str, int startIndex = 0, bool previousCharIsWhiteSpace = true)
+        {
+            var prevCharIsWhiteSpace = previousCharIsWhiteSpace;
+
+            for (var i = startIndex; i < str.Length; i++)
+            {
+                if (!tagStrings.Any(s => str.Substring(i).StartsWith(s)))
+                {
+                    prevCharIsWhiteSpace = char.IsWhiteSpace(str[i]);
+                    continue;
+                }
+
+                var foundTag = prevCharIsWhiteSpace ? (Tag)
                     SelectProperOpenTag(str, i) : SelectProperCloseTag(str, i);
 
                 if (foundTag != null)
