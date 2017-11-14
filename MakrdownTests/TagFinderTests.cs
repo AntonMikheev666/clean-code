@@ -1,48 +1,51 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Markdown;
 using Markdown.Tags;
 using NUnit.Framework;
 
 namespace MakrdownTests
 {
     [TestFixture]
-    public class TagFinderTests
+    public class TagFinderTests: TagFinder
     {
-        [TestCase("_", ExpectedResult = "", TestName = "SingleUnderline")]
-        [TestCase("__", ExpectedResult = "_", TestName = "DoubleUnderline")]
-        [TestCase("_qwe", ExpectedResult = "_", TestName = "SingleUnderlineWithWord")]
-        [TestCase("__qwe", ExpectedResult = "__", TestName = "DoubleUnderlineWithWord")]
-        [TestCase("___qwe", ExpectedResult = "__", TestName = "TripleUnderlineWithWord")]
-        [TestCase("_ qwe", ExpectedResult = "", TestName = "SpaceAfterSingleUnderline")]
-        [TestCase("__ qwe", ExpectedResult = "_", TestName = "SpaceAfterDoubleUnderline")]
-        [TestCase("___ qwe", ExpectedResult = "__", TestName = "SpaceAfterTripleUnderline")]
-        public string TagFinder_SelectProperOpenTag_WorksCorrectly(string str, int selectStartIndex = 0)
+        public TagFinderTests() : base(new [] {"_", "__"})
         {
-            var selectedTag = new TestTagFinder(new HashSet<string> {"_", "__"})
-                .TestSelectProperOpenTag(str, selectStartIndex);
+        }
+
+        [TestCase("_", ExpectedResult = "", TestName = "SingleUnderlineForOpenTag")]
+        [TestCase("__", ExpectedResult = "_", TestName = "DoubleUnderlineForOpenTag")]
+        [TestCase("_qwe", ExpectedResult = "_", TestName = "SingleUnderlineWithWordForOpenTag")]
+        [TestCase("__qwe", ExpectedResult = "__", TestName = "DoubleUnderlineWithWordForOpenTag")]
+        [TestCase("___qwe", ExpectedResult = "__", TestName = "TripleUnderlineWithWordForOpenTag")]
+        [TestCase("_ qwe", ExpectedResult = "", TestName = "SpaceAfterSingleUnderlineForOpenTag")]
+        [TestCase("__ qwe", ExpectedResult = "_", TestName = "SpaceAfterDoubleUnderlineForOpenTag")]
+        [TestCase("___ qwe", ExpectedResult = "__", TestName = "SpaceAfterTripleUnderlineForOpenTag")]
+        public string TagFinder_SelectProperOpenTag(string str, int selectStartIndex = 0)
+        {
+            var selectedTag = SelectProperOpenTag(str, selectStartIndex);
             return selectedTag == null ? "" : selectedTag.TagString;
         }
 
-        [TestCase("_", ExpectedResult = "_", TestName = "SingleUnderline")]
-        [TestCase("__", ExpectedResult = "__", TestName = "DoubleUnderline")]
-        [TestCase("___", ExpectedResult = "", TestName = "TripleUnderline")]
-        [TestCase("_ qwe", ExpectedResult = "_", TestName = "SpaceAfterSingleUnderline")]
-        [TestCase("__ qwe", ExpectedResult = "__", TestName = "SpaceAfterDoubleUnderline")]
-        [TestCase("___ qwe", ExpectedResult = "", TestName = "SpaceAfterTripleUnderline")]
-        [TestCase("_qwe", ExpectedResult = "", TestName = "WordAfterSingleUnderline")]
-        [TestCase("__qwe", ExpectedResult = "", TestName = "WordAfterDoubleUnderline")]
-        [TestCase("___qwe", ExpectedResult = "", TestName = "WordAfterTripleUnderline")]
-        public string TagFinder_SelectProperCloseTag_WorkCorrectly(string str, int selectStartIndex = 0)
+        [TestCase("_", ExpectedResult = "_", TestName = "SingleUnderlineForCloseTag")]
+        [TestCase("__", ExpectedResult = "__", TestName = "DoubleUnderlineForCloseTag")]
+        [TestCase("___", ExpectedResult = "", TestName = "TripleUnderlineForCloseTag")]
+        [TestCase("_ qwe", ExpectedResult = "_", TestName = "SpaceAfterSingleUnderlineForCloseTag")]
+        [TestCase("__ qwe", ExpectedResult = "__", TestName = "SpaceAfterDoubleUnderlineForCloseTag")]
+        [TestCase("___ qwe", ExpectedResult = "", TestName = "SpaceAfterTripleUnderlineForCloseTag")]
+        [TestCase("_qwe", ExpectedResult = "", TestName = "WordAfterSingleUnderlineForCloseTag")]
+        [TestCase("__qwe", ExpectedResult = "", TestName = "WordAfterDoubleUnderlineForCloseTag")]
+        [TestCase("___qwe", ExpectedResult = "", TestName = "WordAfterTripleUnderlineForCloseTag")]
+        public string TagFinder_SelectProperCloseTag(string str, int selectStartIndex = 0)
         {
-            var selectedTag = new TestTagFinder(new HashSet<string> { "_", "__" })
-                .TestSelectProperCloseTag(str, selectStartIndex);
+            var selectedTag = SelectProperCloseTag(str, selectStartIndex);
             return selectedTag == null ? "" : selectedTag.TagString;
         }
 
         [Test, TestCaseSource(nameof(FindTagTestSource))]
-        public Tag TagFinder_FindTag_WorkCorrectly(string str)
+        public Tag TagFinder_FindTag(string str)
         {
-            return new TestTagFinder(new HashSet<string> { "_", "__" }).TestFindTag(str);
+            return FindTag(str);
         }
 
         public static IEnumerable FindTagTestSource

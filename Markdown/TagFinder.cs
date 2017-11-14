@@ -14,7 +14,7 @@ namespace Markdown
             this.tagStrings = tagStrings.OrderByDescending(s => s.Length).ToArray();
         }
 
-        protected Tag FindTag(string str)
+        public Tag FindTag(string str)
         {
             var previousCharIsWhiteSpace = true;
 
