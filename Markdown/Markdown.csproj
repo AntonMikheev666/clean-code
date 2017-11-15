@@ -38,6 +38,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IMd.cs" />
+    <Compile Include="ITagFinder.cs" />
+    <Compile Include="ITagManager.cs" />
     <Compile Include="TagManager.cs" />
     <Compile Include="TagChanges\CloseTagChange.cs" />
     <Compile Include="TagChanges\OpenTagChange.cs" />

@@ -7,11 +7,11 @@ namespace Markdown
 {
     public class TagFinder
     {
-        protected string[] tagStrings;
+        private readonly string[] tagStringsFromLongest;
 
         public TagFinder(IEnumerable<string> tagStrings)
         {
-            this.tagStrings = tagStrings.OrderByDescending(s => s.Length).ToArray();
+            this.tagStringsFromLongest = tagStrings.OrderByDescending(s => s.Length).ToArray();
         }
 
         public Tag[] FindMarkingTags(string input)
@@ -59,7 +59,7 @@ namespace Markdown
 
             for (var i = startIndex; i < str.Length; i++)
             {
-                if (!tagStrings.Any(s => str.Substring(i).StartsWith(s)))
+                if (!tagStringsFromLongest.Any(s => str.Substring(i).StartsWith(s)))
                 {
                     prevCharIsWhiteSpace = char.IsWhiteSpace(str[i]);
                     continue;
@@ -76,9 +76,11 @@ namespace Markdown
 
         private OpenTag SelectProperOpenTag(string input, int selectStartIndex)
         {
-            var properTagStr = tagStrings
-                .FirstOrDefault(s => input.Substring(selectStartIndex).Length > s.Length &&
-                                     input.Substring(selectStartIndex).StartsWith(s) && 
+            var followingString = input.Substring(selectStartIndex);
+
+            var properTagStr = tagStringsFromLongest
+                .FirstOrDefault(s => followingString.Length > s.Length &&
+                                     followingString.StartsWith(s) && 
                                      !char.IsWhiteSpace(input[s.Length]));
 
             return properTagStr == null ? null : new OpenTag(properTagStr, selectStartIndex);
@@ -90,7 +92,7 @@ namespace Markdown
             var firstWord = spaceIndex <= 0 ? 
                     input.Substring(selectStartIndex) : input.Substring(selectStartIndex, spaceIndex);
 
-            var properTagStr = tagStrings
+            var properTagStr = tagStringsFromLongest
                 .FirstOrDefault(s => firstWord == s);
 
             return properTagStr == null ? null : new CloseTag(properTagStr, selectStartIndex);

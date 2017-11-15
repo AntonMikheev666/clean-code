@@ -4,7 +4,7 @@ using Markdown.TagChanges;
 
 namespace Markdown
 {
-	public class Md
+    public class Md
 	{
         private readonly TagFinder tagFinder;
         private readonly TagManager tagManager;
