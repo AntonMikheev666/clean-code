@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Markdown;
+using Markdown.TagChanges;
 using NUnit.Framework;
 
 namespace MakrdownTests
@@ -12,9 +13,12 @@ namespace MakrdownTests
         [TestCase("_q __qwe__ __qw _q w_ qw_", ExpectedResult = "_q <strong>qwe</strong> <em>_qw <em>q w</em> qw</em>", TestName = "Mix")]
         public string Md_RenderToHTML(string mdText)
         {
-            var openTags = new Dictionary<string, string> { {"_", "<em>"}, {"__", "<strong>"} };
-            var closeTags = new Dictionary<string, string> { { "_", "</em>" }, { "__", "</strong>" } };
-            return new Md(new[] { "_", "__" }, openTags, closeTags).RenderToHtml(mdText);
+            var tagChanges = new TagChange[]
+            {
+                new OpenTagChange("_", "<em>"), new OpenTagChange("__", "<strong>"),
+                new CloseTagChange("_", "</em>"), new CloseTagChange("__", "</strong>")
+            };
+            return new Md(new[] { "_", "__" }, tagChanges).RenderToHtml(mdText);
         }
     }
 }

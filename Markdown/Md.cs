@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Markdown.TagChanges;
 
 namespace Markdown
 {
 	public class Md
 	{
         private readonly TagFinder tagFinder;
-        private readonly TagChanger tagChanger;
+        private readonly TagManager tagManager;
 
-        public Md(IEnumerable<string> tagStrings,
-            Dictionary<string, string> openTagChangeTo, Dictionary<string, string> closeTagChangeTo)
+        public Md(IEnumerable<string> tagStrings, IEnumerable<TagChange> tagChanges)
 	    {
 	        tagFinder = new TagFinder(tagStrings);
-            tagChanger = new TagChanger(openTagChangeTo, closeTagChangeTo);
+            tagManager = new TagManager(tagChanges);
 	    }
 
 		public string RenderToHtml(string markdownString)
@@ -20,7 +20,7 @@ namespace Markdown
 		    var allPairedTags = tagFinder.FindMarkingTags(markdownString);
 
 		    foreach (var tag in allPairedTags.OrderByDescending(t => t.StartIndex))
-		        markdownString = tagChanger.ChangeTag(markdownString, tag);
+		        markdownString = tagManager.InsertTag(markdownString, tag);
 
 		    return markdownString;
 		}

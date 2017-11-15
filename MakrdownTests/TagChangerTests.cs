@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Markdown;
 using Markdown.Tags;
 using NUnit.Framework;
 using FluentAssertions;
+using Markdown.TagChanges;
 
 namespace MakrdownTests
 {
@@ -12,18 +13,16 @@ namespace MakrdownTests
         [Test]
         public void TagChanger_ChangeOpenTag()
         {
-            var openTags = new Dictionary<string, string> { {"_", "<em>"}, {"__", "<strong>"} };
-            var closeTags = new Dictionary<string, string> { { "_", "</em>" }, { "__", "</strong>" } };
-            new TagChanger(openTags, closeTags).ChangeTag("_", new OpenTag("_", 0))
+            new TagManager(new TagChange[] { new OpenTagChange("_", "<em>") })
+                .InsertTag("_", new OpenTag("_", 0))
                 .ShouldBeEquivalentTo("<em>");
         }
 
         [Test]
         public void TagChanger_ChangeCloseTag()
         {
-            var openTags = new Dictionary<string, string> { { "_", "<em>" } };
-            var closeTags = new Dictionary<string, string> { { "_", "</em>" } };
-            new TagChanger(openTags, closeTags).ChangeTag("_", new CloseTag("_", 0))
+            new TagManager(new TagChange[] {new CloseTagChange("_", "</em>"), })
+                .InsertTag("_", new CloseTag("_", 0))
                 .ShouldBeEquivalentTo("</em>");
         }
     }
