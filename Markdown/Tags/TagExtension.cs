@@ -9,7 +9,7 @@ namespace Markdown.Tags
             return firstTag.TagString.StartsWith(secondTag.TagString);
         }
 
-        public static Tag MakePaired(this Tag firstTag, Tag secondTag)
+        public static Tag MakePairedWith(this Tag firstTag, Tag secondTag)
         {
             // ReSharper disable once PossibleNullReferenceException
             return (Tag)firstTag.GetType()

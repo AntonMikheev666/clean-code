@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using Markdown.Tags;
 
 namespace Markdown.Interfaces
 {
     public interface ITagFinder
     {
-        Tag[] FindMarkingTags(string input);
+        IEnumerable<Tag> FindMarkingTags(string input);
     }
 }

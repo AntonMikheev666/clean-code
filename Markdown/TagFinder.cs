@@ -15,11 +15,11 @@ namespace Markdown
             this.tagStringsFromLongest = tagStrings.OrderByDescending(s => s.Length).ToArray();
         }
 
-        public Tag[] FindMarkingTags(string strWithTags)
+        public IEnumerable<Tag> FindMarkingTags(string strWithTags)
         {
             if (string.IsNullOrWhiteSpace(strWithTags))
                 return new Tag[] {};
-
+            
             var markingTags = new List<Tag>();
             var openTagStack = new Stack<Tag>();
             var previousCharIsWhiteSpace = true;
@@ -46,12 +46,12 @@ namespace Markdown
                 while (openTagStack.Count > 0 && !topTag.IsPairOf(newTag))
                     topTag = openTagStack.Pop();
 
-                MakeTagsPaired(topTag, newTag);
+                MakeTagsPaired(ref topTag, ref newTag);
                 markingTags.Add(topTag);
                 markingTags.Add(newTag);
                 currentIndex = GetShift(newTag);
             }
-            return markingTags.ToArray();
+            return markingTags;
         }
 
         private int GetShift(Tag newTag)
@@ -59,12 +59,12 @@ namespace Markdown
             return newTag.StartIndex + newTag.TagString.Length;
         }
 
-        private void MakeTagsPaired(Tag firstTag, Tag secondTag)
+        private void MakeTagsPaired(ref Tag firstTag, ref Tag secondTag)
         {
             if (firstTag.TagString.Length > secondTag.TagString.Length)
-                firstTag = firstTag.MakePaired(secondTag);
+                firstTag = firstTag.MakePairedWith(secondTag);
             else
-                secondTag = secondTag.MakePaired(firstTag);
+                secondTag = secondTag.MakePairedWith(firstTag);
         }
 
         private Tag FindTag(string str, int startIndex = 0, bool previousCharIsWhiteSpace = true)
@@ -91,11 +91,10 @@ namespace Markdown
         private OpenTag SelectProperOpenTag(string input, int selectStartIndex)
         {
             var followingString = input.Substring(selectStartIndex);
-
             var properTagStr = tagStringsFromLongest
                 .FirstOrDefault(s => followingString.Length > s.Length &&
                                      followingString.StartsWith(s) && 
-                                     !char.IsWhiteSpace(input[s.Length]));
+                                     !char.IsWhiteSpace(followingString[s.Length]));
 
             return properTagStr == null ? null : new OpenTag(properTagStr, selectStartIndex);
         }
