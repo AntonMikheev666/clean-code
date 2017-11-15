@@ -1,5 +1,3 @@
-using System;
-
 namespace Markdown.Tags
 {
     public static class TagExtension
