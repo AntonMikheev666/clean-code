@@ -1,6 +1,6 @@
 using Markdown.Tags;
 
-namespace Markdown
+namespace Markdown.Interfaces
 {
     public interface ITagManager
     {

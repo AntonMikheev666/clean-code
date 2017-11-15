@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Markdown.Interfaces;
 using Markdown.Tags;
 
 namespace Markdown
 {
-    public class TagFinder
+    public class TagFinder : ITagFinder
     {
         private readonly string[] tagStringsFromLongest;
 

@@ -1,4 +1,4 @@
-﻿namespace Markdown
+﻿namespace Markdown.Interfaces
 {
     public interface IMd
     {

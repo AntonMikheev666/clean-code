@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Markdown.Interfaces;
 using Markdown.TagChanges;
 using Markdown.Tags;
 
 namespace Markdown
 {
-    public class TagManager
+    public class TagManager : ITagManager
     {
         private IEnumerable<MdHtmlTagMap> tagChanges;
         public TagManager(IEnumerable<MdHtmlTagMap> tagChanges)

@@ -1,11 +1,8 @@
+using Markdown.Interfaces;
+
 namespace Markdown.Tags
 {
-    public interface ITag
-    {
-        string TagString { get; }
-        int StartIndex { get; }
-    }
-    public class Tag
+    public class Tag : ITag
     {
         public string TagString { get; private set; }
 

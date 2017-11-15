@@ -1,3 +1,5 @@
+using Markdown.Interfaces;
+
 namespace Markdown.TagChanges
 {
     public class MdHtmlTagMap : IMdHtmlTagMap

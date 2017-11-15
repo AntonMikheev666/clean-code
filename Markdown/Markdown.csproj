@@ -38,16 +38,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IMd.cs" />
-    <Compile Include="ITagFinder.cs" />
-    <Compile Include="ITagManager.cs" />
-    <Compile Include="TagChanges\IMdHtmlTagMap.cs" />
+    <Compile Include="Interfaces\IMd.cs" />
+    <Compile Include="Interfaces\ITagFinder.cs" />
+    <Compile Include="Interfaces\ITagManager.cs" />
+    <Compile Include="Interfaces\IMdHtmlTagMap.cs" />
     <Compile Include="TagManager.cs" />
     <Compile Include="TagChanges\CloseMdHtmlTagMap.cs" />
     <Compile Include="TagChanges\OpenMdHtmlTagMap.cs" />
     <Compile Include="TagChanges\MdHtmlTagMap.cs" />
     <Compile Include="Tags\CloseTag.cs" />
     <Compile Include="Md.cs" />
+    <Compile Include="Interfaces\ITag.cs" />
     <Compile Include="Tags\OpenTag.cs" />
     <Compile Include="TagFinder.cs" />
     <Compile Include="Tags\Tag.cs" />

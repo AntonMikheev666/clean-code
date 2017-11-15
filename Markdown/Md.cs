@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Markdown.Interfaces;
 using Markdown.TagChanges;
 
 namespace Markdown
 {
-    public class Md
+    public class Md : IMd
 	{
         private readonly TagFinder tagFinder;
         private readonly TagManager tagManager;
