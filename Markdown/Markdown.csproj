@@ -41,16 +41,18 @@
     <Compile Include="IMd.cs" />
     <Compile Include="ITagFinder.cs" />
     <Compile Include="ITagManager.cs" />
+    <Compile Include="TagChanges\IMdHtmlTagMap.cs" />
     <Compile Include="TagManager.cs" />
-    <Compile Include="TagChanges\CloseTagChange.cs" />
-    <Compile Include="TagChanges\OpenTagChange.cs" />
-    <Compile Include="TagChanges\TagChange.cs" />
+    <Compile Include="TagChanges\CloseMdHtmlTagMap.cs" />
+    <Compile Include="TagChanges\OpenMdHtmlTagMap.cs" />
+    <Compile Include="TagChanges\MdHtmlTagMap.cs" />
     <Compile Include="Tags\CloseTag.cs" />
     <Compile Include="Md.cs" />
     <Compile Include="Tags\OpenTag.cs" />
     <Compile Include="TagFinder.cs" />
     <Compile Include="Tags\Tag.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Tags\TagExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

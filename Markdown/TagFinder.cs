@@ -14,43 +14,56 @@ namespace Markdown
             this.tagStringsFromLongest = tagStrings.OrderByDescending(s => s.Length).ToArray();
         }
 
-        public Tag[] FindMarkingTags(string input)
+        public Tag[] FindMarkingTags(string strWithTags)
         {
-            if (string.IsNullOrWhiteSpace(input))
+            if (string.IsNullOrWhiteSpace(strWithTags))
                 return new Tag[] {};
 
             var markingTags = new List<Tag>();
-            var openTagStack = new Stack<OpenTag>();
+            var openTagStack = new Stack<Tag>();
             var previousCharIsWhiteSpace = true;
-            for (var i = 0; i < input.Length; previousCharIsWhiteSpace = char.IsWhiteSpace(input[i - 1]))
+            for (var currentIndex = 0; currentIndex < strWithTags.Length; previousCharIsWhiteSpace = char.IsWhiteSpace(strWithTags[currentIndex - 1]))
             {
-                var newTag = FindTag(input, i, previousCharIsWhiteSpace);
+                var newTag = FindTag(strWithTags, currentIndex, previousCharIsWhiteSpace);
                 if (newTag == null)
                     break;
 
-                if (newTag is CloseTag && !openTagStack.Any(t => Tag.OneTagStringStartsWithAnother(t, newTag)))
+                if (newTag is CloseTag && !openTagStack.Any(t => t.IsPairOf(newTag)))
                 {
-                    i = newTag.StartIndex + newTag.TagString.Length;
+                    currentIndex = GetShift(newTag);
                     continue;
                 }
 
                 if (newTag is OpenTag)
                 {
-                    openTagStack.Push((OpenTag)newTag);
-                    i = newTag.StartIndex + newTag.TagString.Length;
+                    openTagStack.Push(newTag);
+                    currentIndex = GetShift(newTag);
                     continue;
                 }
 
                 var topTag = openTagStack.Pop();
-                while (openTagStack.Count > 0 && !Tag.OneTagStringStartsWithAnother(topTag, newTag))
+                while (openTagStack.Count > 0 && !topTag.IsPairOf(newTag))
                     topTag = openTagStack.Pop();
 
-                Tag.SetTagStringToLesser(topTag, newTag);
+                MakeTagsPaired(topTag, newTag);
                 markingTags.Add(topTag);
                 markingTags.Add(newTag);
-                i = newTag.StartIndex + newTag.TagString.Length;
+                currentIndex = GetShift(newTag);
             }
             return markingTags.ToArray();
+        }
+
+        private int GetShift(Tag newTag)
+        {
+            return newTag.StartIndex + newTag.TagString.Length;
+        }
+
+        private void MakeTagsPaired(Tag firstTag, Tag secondTag)
+        {
+            if (firstTag.TagString.Length > secondTag.TagString.Length)
+                firstTag = firstTag.MakePaired(secondTag);
+            else
+                secondTag = secondTag.MakePaired(firstTag);
         }
 
         private Tag FindTag(string str, int startIndex = 0, bool previousCharIsWhiteSpace = true)

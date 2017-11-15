@@ -13,10 +13,10 @@ namespace MakrdownTests
         [TestCase("_q __qwe__ __qw _q w_ qw_", ExpectedResult = "_q <strong>qwe</strong> <em>_qw <em>q w</em> qw</em>", TestName = "Mix")]
         public string Md_RenderToHTML(string mdText)
         {
-            var tagChanges = new TagChange[]
+            var tagChanges = new MdHtmlTagMap[]
             {
-                new OpenTagChange("_", "<em>"), new OpenTagChange("__", "<strong>"),
-                new CloseTagChange("_", "</em>"), new CloseTagChange("__", "</strong>")
+                new OpenMdHtmlTagMap("_", "<em>"), new OpenMdHtmlTagMap("__", "<strong>"),
+                new CloseMdHtmlTagMap("_", "</em>"), new CloseMdHtmlTagMap("__", "</strong>")
             };
             return new Md(new[] { "_", "__" }, tagChanges).RenderToHtml(mdText);
         }
