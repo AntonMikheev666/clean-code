@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using FluentAssertions;
 using Markdown;
 using Markdown.Tags;
 using NUnit.Framework;
@@ -9,8 +10,21 @@ namespace MakrdownTests
     [TestFixture]
     public class TagFinderTests: TagFinder
     {
-        public TagFinderTests() : base(new [] {"_", "__"})
+        public TagFinderTests() : base(new [] {"_", "__"}) {}
+
+        [Test]
+        public void TagFinder_FindAllPairedTags()
         {
+            var q = FindAllPairedTags("_q __qwe__ __qw _q w_ qw_");
+            q.ShouldBeEquivalentTo(new Tag[]
+                {
+                    new OpenTag("__", 3),
+                    new CloseTag("__", 8),
+                    new OpenTag("_", 11),
+                    new OpenTag("_", 16),
+                    new CloseTag("_", 20),
+                    new CloseTag("_", 24)
+                });
         }
 
         [TestCase("_", ExpectedResult = "", TestName = "SingleUnderlineForOpenTag")]
@@ -21,9 +35,9 @@ namespace MakrdownTests
         [TestCase("_ qwe", ExpectedResult = "", TestName = "SpaceAfterSingleUnderlineForOpenTag")]
         [TestCase("__ qwe", ExpectedResult = "_", TestName = "SpaceAfterDoubleUnderlineForOpenTag")]
         [TestCase("___ qwe", ExpectedResult = "__", TestName = "SpaceAfterTripleUnderlineForOpenTag")]
-        public string TagFinder_SelectProperOpenTag(string str, int selectStartIndex = 0)
+        public string TagFinder_SelectProperOpenTag(string str)
         {
-            var selectedTag = SelectProperOpenTag(str, selectStartIndex);
+            var selectedTag = SelectProperOpenTag(str, 0);
             return selectedTag == null ? "" : selectedTag.TagString;
         }
 
@@ -36,9 +50,9 @@ namespace MakrdownTests
         [TestCase("_qwe", ExpectedResult = "", TestName = "WordAfterSingleUnderlineForCloseTag")]
         [TestCase("__qwe", ExpectedResult = "", TestName = "WordAfterDoubleUnderlineForCloseTag")]
         [TestCase("___qwe", ExpectedResult = "", TestName = "WordAfterTripleUnderlineForCloseTag")]
-        public string TagFinder_SelectProperCloseTag(string str, int selectStartIndex = 0)
+        public string TagFinder_SelectProperCloseTag(string str)
         {
-            var selectedTag = SelectProperCloseTag(str, selectStartIndex);
+            var selectedTag = SelectProperCloseTag(str, 0);
             return selectedTag == null ? "" : selectedTag.TagString;
         }
 

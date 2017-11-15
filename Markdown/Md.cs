@@ -19,7 +19,7 @@ namespace Markdown
 
 		public string RenderToHtml(string markdownString)
 		{
-		    var allPairedTags = tagFinder.GetAllPairedTags(markdownString);
+		    var allPairedTags = tagFinder.FindAllPairedTags(markdownString);
 
 		    foreach (var tag in allPairedTags.Reverse())
 		        markdownString = tagChanger.ChangeTag(markdownString, tag);

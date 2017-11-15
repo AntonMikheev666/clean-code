@@ -14,40 +14,37 @@ namespace Markdown
             this.tagStrings = tagStrings.OrderByDescending(s => s.Length).ToArray();
         }
 
-        public Tag[] GetAllPairedTags(string input)
+        public Tag[] FindAllPairedTags(string input)
         {
             var tags = new List<Tag>();
             var tagStack = new Stack<OpenTag>();
             var previousCharIsWhiteSpace = true;
-            for (var i = 0; i < input.Length;)
+            Tag newTag;
+            for (var i = 0; i < input.Length; previousCharIsWhiteSpace = char.IsWhiteSpace(input[i - 1]))
             {
-                var newTag = FindTag(input, i, previousCharIsWhiteSpace);
-
+                newTag = FindTag(input, i, previousCharIsWhiteSpace);
                 if (newTag == null)
                     break;
-
+                if (newTag is CloseTag && !tagStack.Any(t => Tag.OneTagStringStartsWithAnother(t, newTag)))
+                {
+                    i = newTag.StartIndex + newTag.TagString.Length;
+                    continue;
+                }
                 if (newTag is OpenTag)
                 {
                     tagStack.Push((OpenTag)newTag);
                     i = newTag.StartIndex + newTag.TagString.Length;
-                    previousCharIsWhiteSpace = char.IsWhiteSpace(input[i - 1]);
                     continue;
                 }
 
-                var topTag = tagStack.Peek();
-                while (!(topTag.TagString.StartsWith(newTag.TagString) && newTag.TagString.StartsWith(topTag.TagString)))
-                {
-                    tagStack.Pop();
-                    topTag = tagStack.Peek();
-                }
-
-                tags.Insert(0, tagStack.Pop());
+                var topTag = tagStack.Pop();
+                while (tagStack.Count > 0 && !Tag.OneTagStringStartsWithAnother(topTag, newTag))
+                    topTag = tagStack.Pop();
+                Tag.SetTagStringToLesser(topTag, newTag);
+                tags.Insert(0, topTag);
                 tags.Add(newTag);
-
                 i = newTag.StartIndex + newTag.TagString.Length;
-                previousCharIsWhiteSpace = char.IsWhiteSpace(input[i - 1]);
             }
-
             return tags.ToArray();
         }
 
