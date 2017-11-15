@@ -21,7 +21,7 @@ namespace Markdown
 		{
 		    var allPairedTags = tagFinder.FindAllPairedTags(markdownString);
 
-		    foreach (var tag in allPairedTags.Reverse())
+		    foreach (var tag in allPairedTags.OrderByDescending(t => t.StartIndex))
 		        markdownString = tagChanger.ChangeTag(markdownString, tag);
 
 		    return markdownString;

@@ -19,10 +19,9 @@ namespace Markdown
             var tags = new List<Tag>();
             var tagStack = new Stack<OpenTag>();
             var previousCharIsWhiteSpace = true;
-            Tag newTag;
             for (var i = 0; i < input.Length; previousCharIsWhiteSpace = char.IsWhiteSpace(input[i - 1]))
             {
-                newTag = FindTag(input, i, previousCharIsWhiteSpace);
+                var newTag = FindTag(input, i, previousCharIsWhiteSpace);
                 if (newTag == null)
                     break;
                 if (newTag is CloseTag && !tagStack.Any(t => Tag.OneTagStringStartsWithAnother(t, newTag)))
@@ -40,8 +39,9 @@ namespace Markdown
                 var topTag = tagStack.Pop();
                 while (tagStack.Count > 0 && !Tag.OneTagStringStartsWithAnother(topTag, newTag))
                     topTag = tagStack.Pop();
+
                 Tag.SetTagStringToLesser(topTag, newTag);
-                tags.Insert(0, topTag);
+                tags.Add(topTag);
                 tags.Add(newTag);
                 i = newTag.StartIndex + newTag.TagString.Length;
             }
