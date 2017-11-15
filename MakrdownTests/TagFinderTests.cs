@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Markdown;
 using Markdown.Tags;
 using NUnit.Framework;

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Markdown;
+﻿using Markdown;
 using Markdown.TagChanges;
 using NUnit.Framework;
 
@@ -10,6 +9,7 @@ namespace MakrdownTests
     {
         [TestCase("_qwe_", ExpectedResult = "<em>qwe</em>", TestName = "OneItalicWord")]
         [TestCase("__qwe__", ExpectedResult = "<strong>qwe</strong>", TestName = "OneBoldWord")]
+        [TestCase("___qwe___", ExpectedResult = "<strong>_qwe_</strong>", TestName = "TripleUnderline")]
         [TestCase("_q __qwe__ __qw _q w_ qw_", ExpectedResult = "_q <strong>qwe</strong> <em>_qw <em>q w</em> qw</em>", TestName = "Mix")]
         public string Md_RenderToHTML(string mdText)
         {

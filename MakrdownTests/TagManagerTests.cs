@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Markdown;
 using Markdown.Tags;
 using NUnit.Framework;
@@ -8,10 +7,10 @@ using Markdown.TagChanges;
 namespace MakrdownTests
 {
     [TestFixture]
-    public class TagChangerTests
+    public class TagManagerTests
     {
         [Test]
-        public void TagChanger_ChangeOpenTag()
+        public void TagManager_InsertOpenTag()
         {
             new TagManager(new TagChange[] { new OpenTagChange("_", "<em>") })
                 .InsertTag("_", new OpenTag("_", 0))
@@ -19,7 +18,7 @@ namespace MakrdownTests
         }
 
         [Test]
-        public void TagChanger_ChangeCloseTag()
+        public void TagManager_InsertCloseTag()
         {
             new TagManager(new TagChange[] {new CloseTagChange("_", "</em>"), })
                 .InsertTag("_", new CloseTag("_", 0))

@@ -48,7 +48,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TagChangerTests.cs" />
+    <Compile Include="TagManagerTests.cs" />
     <Compile Include="MdTests.cs" />
     <Compile Include="TagFinderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
