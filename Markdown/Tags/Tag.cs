@@ -38,7 +38,7 @@ namespace Markdown.Tags
 
         public override int GetHashCode()
         {
-            return TagString.GetHashCode() + StartIndex.GetHashCode();
+            return StartIndex.GetHashCode();
         }
 
         public override string ToString()
