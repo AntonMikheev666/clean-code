@@ -7,14 +7,27 @@ namespace Markdown.Tags
             return firstTag.TagString.StartsWith(secondTag.TagString);
         }
 
-        public static Tag MakePairedWith(this Tag firstTag, Tag secondTag)
+        /// <summary>
+        /// Changes TagString of current object if tagString of secondTag have a smaller length.
+        /// </summary>
+        /// <param name="firstTag"></param>
+        /// <param name="secondTag"></param>
+        /// <returns></returns>
+        public static Tag ChangeTagString(this Tag firstTag, Tag secondTag)
         {
-            // ReSharper disable once PossibleNullReferenceException
-            return (Tag)firstTag.GetType()
-                .GetConstructor(new[] {typeof(string), typeof(int)})
-                .Invoke(new object[] {secondTag.TagString, firstTag.StartIndex});
+            if (secondTag == null || secondTag.TagString.Length > firstTag.TagString.Length)
+                return firstTag;
+            if(firstTag is OpenTag)
+                return new OpenTag(secondTag.TagString, firstTag.StartIndex);
+            return new CloseTag(secondTag.TagString, firstTag.StartIndex);
         }
 
+        /// <summary>
+        /// Returns true if starts with secondTag OR appears to be a start of secondTag.
+        /// </summary>
+        /// <param name="firstTag"></param>
+        /// <param name="secondTag"></param>
+        /// <returns></returns>
         public static bool IsPairOf(this Tag firstTag, Tag secondTag)
         {
             return firstTag.StartsWith(secondTag) || secondTag.StartsWith(firstTag);

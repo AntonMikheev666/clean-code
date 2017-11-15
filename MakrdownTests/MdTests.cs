@@ -1,4 +1,6 @@
-﻿using Markdown;
+﻿using System.Collections.Generic;
+using System.IO;
+using Markdown;
 using Markdown.TagChanges;
 using NUnit.Framework;
 
@@ -19,6 +21,12 @@ namespace MakrdownTests
                 new CloseMdHtmlTagMap("_", "</em>"), new CloseMdHtmlTagMap("__", "</strong>")
             };
             return new Md(new[] { "_", "__" }, tagChanges).RenderToHtml(mdText);
+        }
+
+        [Test]
+        public void Md_TimeTest()
+        {
+            
         }
     }
 }

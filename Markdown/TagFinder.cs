@@ -46,7 +46,8 @@ namespace Markdown
                 while (openTagStack.Count > 0 && !topTag.IsPairOf(newTag))
                     topTag = openTagStack.Pop();
 
-                MakeTagsPaired(ref topTag, ref newTag);
+                topTag = topTag.ChangeTagString(newTag);
+                newTag = newTag.ChangeTagString(topTag);
                 markingTags.Add(topTag);
                 markingTags.Add(newTag);
                 currentIndex = GetShift(newTag);
@@ -57,14 +58,6 @@ namespace Markdown
         private int GetShift(Tag newTag)
         {
             return newTag.StartIndex + newTag.TagString.Length;
-        }
-
-        private void MakeTagsPaired(ref Tag firstTag, ref Tag secondTag)
-        {
-            if (firstTag.TagString.Length > secondTag.TagString.Length)
-                firstTag = firstTag.MakePairedWith(secondTag);
-            else
-                secondTag = secondTag.MakePairedWith(firstTag);
         }
 
         private Tag FindTag(string str, int startIndex = 0, bool previousCharIsWhiteSpace = true)
