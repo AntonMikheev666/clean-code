@@ -41,11 +41,9 @@
     <Compile Include="Interfaces\IMd.cs" />
     <Compile Include="Interfaces\ITagFinder.cs" />
     <Compile Include="Interfaces\ITagManager.cs" />
-    <Compile Include="Interfaces\IMdHtmlTagMap.cs" />
+    <Compile Include="TagChanges\IMd2htmltagMap.cs" />
     <Compile Include="TagManager.cs" />
-    <Compile Include="TagChanges\CloseMdHtmlTagMap.cs" />
-    <Compile Include="TagChanges\OpenMdHtmlTagMap.cs" />
-    <Compile Include="TagChanges\MdHtmlTagMap.cs" />
+    <Compile Include="TagChanges\Md2HtmlTagMap.cs" />
     <Compile Include="Tags\CloseTag.cs" />
     <Compile Include="Md.cs" />
     <Compile Include="Interfaces\ITag.cs" />

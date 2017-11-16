@@ -9,25 +9,31 @@ namespace Markdown
 {
     public class TagManager : ITagManager
     {
-        private IEnumerable<MdHtmlTagMap> tagChanges;
-        public TagManager(IEnumerable<MdHtmlTagMap> tagChanges)
+        private IEnumerable<Md2HtmlTagMap> tagMaps;
+        public TagManager(IEnumerable<Md2HtmlTagMap> tagMaps)
         {
-            this.tagChanges = tagChanges;
+            this.tagMaps = tagMaps;
         }
 
         public string InsertTag(string strWithTags, Tag tag)
         {
-            Type tagChangeType = tag is OpenTag ? typeof(OpenMdHtmlTagMap) : typeof(CloseMdHtmlTagMap);
-            var properTagChange = tagChanges
-                .FirstOrDefault(c => c.GetType() == tagChangeType &&
-                                     c.MdTagString == tag.TagString
-                );
+            var tagMap = tag is OpenTag
+                ? tagMaps.FirstOrDefault(m => m.MdOpenTagString == tag.TagString)
+                : tagMaps.FirstOrDefault(m => m.MdCloseTagString == tag.TagString);
 
-            return properTagChange == null
-                ? strWithTags
-                : strWithTags
-                    .Remove(tag.StartIndex, tag.TagString.Length)
-                    .Insert(tag.StartIndex, properTagChange.HtmlTagString);
+            if (tagMap == null)
+                return strWithTags;
+
+            return tag is OpenTag
+                ? ReplaceTagWithStr(strWithTags, tag, tagMap.GetHtmlOpenTagString)
+                : ReplaceTagWithStr(strWithTags, tag, tagMap.GetHtmlCloseTagString);
+        }
+
+        private string ReplaceTagWithStr(string strWithTags, Tag tag, string strToPut)
+        {
+            return strWithTags
+                .Remove(tag.StartIndex, tag.TagString.Length)
+                .Insert(tag.StartIndex, strToPut);
         }
     }
 }

@@ -84,6 +84,7 @@ namespace Markdown
         private OpenTag SelectProperOpenTag(string input, int selectStartIndex)
         {
             var followingString = input.Substring(selectStartIndex);
+
             var properTagStr = tagStringsFromLongest
                 .FirstOrDefault(s => followingString.Length > s.Length &&
                                      followingString.StartsWith(s) && 

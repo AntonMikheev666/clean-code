@@ -10,7 +10,7 @@ namespace Markdown
         private readonly TagFinder tagFinder;
         private readonly TagManager tagManager;
 
-        public Md(IEnumerable<string> tagStrings, IEnumerable<MdHtmlTagMap> tagChanges)
+        public Md(IEnumerable<string> tagStrings, IEnumerable<Md2HtmlTagMap> tagChanges)
 	    {
 	        tagFinder = new TagFinder(tagStrings);
             tagManager = new TagManager(tagChanges);
